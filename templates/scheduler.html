@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>Scheduler Page</title>
+    </head>
+    <body>
+        <a href="/" style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: rgb(60,50,130);  color: white; text-align: center; text-decoration: none; border-radius: 5px;">Back to Home</a>
+        <div id="scheduler">
+            <h2>Scheduler Settings</h2>
+            <p>Here you can configure your scheduler settings.</p>
+            <form id="schedulerForm" onsubmit="addSchedule(event)"></form>
+                <table id="schedulerTable" border="1">
+                    <thead>
+                        <tr>
+                            <th>Schedule ID</th>
+                            <th>Conversation Template ID</th>
+                            <th>Start Date</th>
+                            <th>Frequency</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in schedules %}
+                        <tr>
+                            <td>{{ schedule.schedule_id }}</td>
+                            <td>{{ schedule.convo_template_id }}</td>
+                            <td>{{ schedule.start_date }}</td>
+                            <td>{{ schedule.frequency }}</td>
+                            <td>{{ schedule.end_date }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <th><i>Random Hash</i></th>
+                            <th>
+                                <select id="conversationTemplateId" name="conversationTemplateId" required>
+                                    {% for template in conversation_templates %}
+                                        <option value="{{ template.convo_template_id }}">{{ template.convo_template_id }}</option>
+                                    {% endfor %}
+                                </select>
+                            </th>
+                            <th>
+                                <input type="date" id="startDate" name="startDate" required min="{{ current_date }}">
+                            </th>
+                            <th>
+                                <select id="frequency" name="frequency" required>
+                                    <option value="one day">One Day</option>
+                                    <option value="one week">One Week</option>
+                                    <option value="two weeks">Two Weeks</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input type="date" id="endDate" name="endDate" required min="{{ current_date }}">
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <button type="submit" onclick="submitScheduleForm(event)">Add</button>
+                <script>
+                    function submitScheduleForm(event) {
+                        event.preventDefault();
+                        
+                        const conversationTemplateId = document.getElementById('conversationTemplateId').value;
+                        const startDate = document.getElementById('startDate').value;
+                        const frequency = document.getElementById('frequency').value;
+                        const endDate = document.getElementById('endDate').value;
+
+                        const data = {
+                            'conversationTemplateId': conversationTemplateId,
+                            'startDate': startDate,
+                            'frequency': frequency,
+                            'endDate': endDate
+                        };
+
+                        fetch('/scheduler', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    }
+                </script>
+            </form>
+        </div>
+    </body>
+</html>

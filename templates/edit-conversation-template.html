@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Settings Page</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .tab {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .tab:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="tab" onclick="showContent('scheduler')">Scheduler</div>
+        <div class="tab" onclick="showContent('conversational')">Conversational Workflow</div>
+    </div>
+    
+</body>
+</html>

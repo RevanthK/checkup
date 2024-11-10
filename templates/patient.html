@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>Patient Portal Page</title>
+        <script>
+            function toggleProfile(selectedPatient) {
+
+                profileDiv = document.getElementById('profile')
+                
+                if (selectedPatient) {
+                    profileDiv.innerHTML = `
+                        <div class="container">
+                            <div class="patient-profile">
+                                <h3>Demographics</h3>
+                                <div style="font-size: 50px;">👤</div>
+                                <p><strong>Name:</strong> ${selectedPatient.patient_name}</p>
+                                <p><strong>Phone:</strong> ${selectedPatient.phone}</p>
+                                <p><strong>Address:</strong> ${selectedPatient.address}</p>
+                            </div>
+                            <div class="patient-profile2">
+                                <h3>Health Snapshot</h3>
+                                <p><strong>Allergies:</strong> ${selectedPatient.health.allergies}</p>
+                                <p><strong>Medication:</strong> ${selectedPatient.health.medication}</p>
+                                <p><strong>Exercise Level:</strong> ${selectedPatient.health.exercise_level}</p>
+                                <p><strong>Mental Health:</strong> ${selectedPatient.health.mental_health}</p>
+                                <p><strong>Social Health:</strong> ${selectedPatient.health.social_health}</p>
+                                <p><strong>Emergency Contact:</strong> ${selectedPatient.health.emergency_contact}</p>
+                            </div>
+                            <div class="patient-profile3">
+                                <h3>Checkin Call History</h3>
+                            </div>
+                        </div>
+                        
+                    `;
+                    profileDiv.style.display = 'block';
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <a href="/" style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: rgb(60,50,130);  color: white; text-align: center; text-decoration: none; border-radius: 5px;">Back to Home</a>
+        <div id="patient">
+            <h2>Patient Portal</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                        <tr onclick='toggleProfile({{ patient | tojson }})'>
+                            <td>{{ patient.patient_name }}</td>
+                            <td>{{ patient.phone }}</td>
+                            <td>{{ patient.address }}</td>
+                            <td><a href="#">Call</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div id="profile" style="display: none;"></div>
+            <elevenlabs-convai agent-id="3JYq3pt7rPssSdo5JLCf"></elevenlabs-convai><script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+        </div>
+    </body>
+</html>

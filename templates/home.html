@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Settings Page</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .tab {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .tab:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; width: 100vw;">
+        <div class="content" id="content" style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+            <h1>Welcome to the Checkup</h1>
+        </div>
+        <br>
+        <div class="sidebar" style="text-align: center; margin-bottom: 40px;">
+            <div class="tab"><a href="patient">Patient Info</a></div>
+            <div class="tab"><a href="scheduler">Scheduler</a></div>
+            <div class="tab"><a href="convo-workflow">Conversational Workflow</a></div>
+        </div>
+    </div>
+</body>
+</html>

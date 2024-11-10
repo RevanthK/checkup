@@ -1,0 +1,50 @@
+/* Basic table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+}
+
+/* Table header styling */
+th {
+    background-color: rgb(60,50,130); 
+    color: white;              
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Table row styling */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Zebra striping for rows */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Hover effect on rows */
+tr:hover {
+    background-color: #ddd;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Adds space between the divs */
+    margin: 0 auto; /* Centers the container */
+    padding: 20px; /* Optional: adds padding around the container */
+}
+
+.patient-profile, .patient-profile2, .patient-profile3 {
+    border: 1px solid #ccc; /* Optional: adds a border to the divs */
+    padding: 15px; /* Optional: adds padding inside each div */
+    border-radius: 5px; /* Optional: makes the corners rounded */
+    width: 300px; /* Optional: gives a consistent width to the divs */
+    text-align: left; /* Ensures text alignment looks good */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
+}

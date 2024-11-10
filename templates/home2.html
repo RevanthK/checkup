@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Echo Care Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    .sidebar {
+      width: 200px;
+      background-color: #e8f4ee;
+      height: 100vh;
+      padding: 20px 0;
+      position: fixed;
+    }
+    .sidebar a {
+      display: block;
+      color: #000;
+      text-decoration: none;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .sidebar a.active {
+      background-color: #66c07d;
+      color: white;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+    .dashboard {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    .dashboard.active {
+      display: block;
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .profile img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+    }
+    .profile-info {
+      flex: 1;
+      margin-left: 20px;
+    }
+    .profile-info h2 {
+      margin: 0;
+    }
+    .profile-actions button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #66c07d;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .check-in-history {
+      margin-top: 20px;
+    }
+    .check-in-history-table {
+      margin: 0px 30px 30px;
+    }
+    .check-in-history table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .check-in-history table th, .check-in-history table td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+    .check-in-history table .transcript-button {
+      color: white;
+      background-color: #66c07d;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .help-settings {
+      position: absolute;
+      bottom: 50px;
+      left: 20px;
+    }
+    .help-settings a {
+      display: block;
+      margin: 5px 0;
+      text-decoration: none;
+      color: #666;
+    }
+
+    .add-scheduler {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .add-scheduler button {
+      padding: 10px 15px;
+      background-color: #66c07d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .add-scheduler button:hover {
+      background-color: #57a86b;
+    }
+
+    .scheduler-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .scheduler-table th, .scheduler-table td {
+      padding: 10px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .scheduler-table th {
+      background-color: #e8f4ee;
+      font-weight: bold;
+    }
+
+    .edit-icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-color: #66c07d;
+      border-radius: 50%;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      line-height: 20px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .editable-content {
+      padding: 5px;
+      border: 1px solid #66c07d;
+      border-radius: 4px;
+      background-color: white;
+      min-width: 100px;
+      outline: none;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .section p {
+      margin: 0;
+      padding: 5px 0;
+    }
+
+    .textarea-container {
+      margin-top: 10px;
+    }
+
+    .textarea-container textarea {
+      margin-top: 10px;
+      width: 80%;
+      height: 150px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 14px;
+      resize: none;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #66c07d;
+    }
+
+    .add-button-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .add-button-container h3 {
+      margin-right: 20px;
+      font-size: 18px;
+    }
+
+    .add-button {
+      padding: 10px 20px;
+      background-color: #66c07d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .add-button:hover {
+      background-color: #57a86b;
+    }
+
+    textarea {
+      height: 150px;
+      resize: none;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .save-button {
+      background-color: #66c07d;
+      color: white;
+    }
+
+    .save-button:hover {
+      background-color: #57a86b;
+    }
+
+    .cancel-button {
+      background-color: #ff5e5e;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #e04e4e;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <img src="../static/logo_transparent.png" alt="logo" style="width: 150px; height: 150px; display: block; margin: 0 auto;">
+    <a href="#patients-information" class="active" onclick="switchTab('patients-information')">
+      <img src="../static/icons/Union.png" style="width: 19px; height: 19px; margin-right: 5px; vertical-align: middle;">
+      Patients Information
+    </a>
+    <a href="#scheduler" onclick="switchTab('scheduler')">
+      <img src="../static/icons/calendar.png" style="width: 19px; height: 19px; margin-right: 5px; vertical-align: middle;">
+      Scheduler
+    </a>
+    <div class="help-settings">
+      <a href="#">
+        <img src="../static/icons/question-mark-circle.png" style="width: 24px; height: 24px; margin-right: 5px; vertical-align: middle;">
+        Help
+      </a>
+      <a href="#">
+        <img src="../static/icons/cog-6-tooth.png" style="width: 24px; height: 24px; margin-right: 5px; vertical-align: middle;">
+        Settings
+      </a>
+    </div>
+  </div>
+  <div class="content">
+    <div id="patients-information" class="dashboard active">
+      <div class="profile">
+        <div style="display: flex; align-items: center;">
+          <img src="../static/old_head.jpg" alt="Profile Picture">
+          <div class="profile-info">
+            <h2>James Smith</h2>
+            <p style="color: #666; line-height: 1.8;">
+              Male · Age 75
+              <br>
+              Age-Related Health and Wellness
+            </p>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button onclick="toggleCall(this)" class="call-button">Make Voice Agent Call</button>
+        </div>
+      </div>
+      <div class="additional-info">
+        <p style="color: #666; line-height: 1.8;">
+          Email: james123@gmail.com<br>
+          Phone: (725) 421-2312<br>
+          Address: 123 Main St<br>
+          Emergency Contact: Bob Doe
+        </p>
+      </div>
+      <div class="check-in-history">
+        <div style="display: flex; justify-content: space-between;">
+            <div style="display: flex;">
+                <h3 onclick="swithTab2('check-in')" style="margin: 20px 10px 20px; color: #66c07d; cursor: pointer; border: 2px solid #66c07d; border-radius: 5px; padding: 10px 15px;">Call History</h3>
+                <h3 onclick="swithTab2('medical')" style="margin: 20px 10px 20px; color: #66c07d; cursor: pointer; border: 2px solid #66c07d; border-radius: 5px; padding: 10px 15px;">Medical Record</h3>
+            </div>
+            <h3 onclick="syncCalls()" style="margin: 20px 10px 20px; color: #4c7abf; cursor: pointer; border: 2px solid #4c7abf; border-radius: 5px; padding: 10px 15px;">Sync Calls</h3>
+        </div>
+        <div id="check-in" class="check-in-history-table" style="display: block;">
+          <table>
+            <tr>
+              <th>Time</th>
+              <th>Check-in Topic</th>
+              <th>Details</th>
+            </tr>
+            {% for call in calls %}
+              <tr>
+                <td>{{ call.time }}</td>
+                <td>{{ call.topic }}</td>
+                <td><button class="transcript-button">Transcript</button></td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <div id="medical-record" class="check-in-history-table" style="display: none; background-color: #f9f9f9; padding-left: 20px; padding-top: 20px;">
+          <div class="section" >
+            <label>Allergies:</label>
+            <p>peanuts</p>
+          </div>
+        
+          <div class="section">
+            <label>Medications:</label>
+            <p>aspirin</p>
+          </div>
+        
+          <div class="section">
+            <label>Social Health:</label>
+            <p>good</p>
+          </div>
+        
+          <div class="section">
+            <label>Exercise Level:</label>
+            <p>moderate</p>
+          </div>
+        
+          <div class="textarea-container">
+            <label for="exercise-comments">Exercise Notes:</label>
+            <br>
+            <textarea id="exercise-comments" placeholder="Add your comments or observations here..."></textarea>
+          </div>
+        
+          <div class="textarea-container">
+            <label for="mental-health-comments">Mental Health Notes:</label>
+            <br>
+            <textarea id="mental-health-comments" placeholder="Add your comments or observations here..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="scheduler" class="dashboard">
+      <h2>Add a Scheduler for Patient</h2>
+      <button class="add-button">Add</button>
+    <h3>Configure existing Scheduler for Patient</h3>
+    <table style="border-spacing: 20px; border-collapse: separate; background-color: #f9f9f9;">
+      <thead>
+        <tr>
+          <th style="padding: 15px;">Schedule ID</th>
+          <th style="padding: 15px;">Schedule Items and Details</th>
+          <th style="padding: 15px;">Frequency</th>
+          <th style="padding: 15px;">Start Date</th>
+          <th style="padding: 15px;">End Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td style="padding: 15px;">1</td>
+          <td style="padding: 15px;"><span contenteditable="false">Mental Health Check</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2 Weeks</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2023-01-01 10:00:00</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2024-01-01 11:00:00</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><button class="edit-button" onclick="openEditForm(1)" style="border: none; background-color: #f9f9f9; cursor: pointer;"><img src="../static/icons/pencil-square.png" alt="" style="width: 19px; height: 19px;"></button></td>
+        </tr>
+        <tr>
+          <td style="padding: 15px;">2</td>
+          <td style="padding: 15px;"><span contenteditable="false">Dietary Check</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">4 Weeks</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2023-01-01 10:00:00</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2024-01-01 11:00:00</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><button class="edit-button" onclick="openEditForm(2)" style="border: none; background-color: #f9f9f9; cursor: pointer;"><img src="../static/icons/pencil-square.png" alt="" style="width: 19px; height: 19px;"></button></td>
+        </tr>
+        <tr class="highlight-row">
+          <td style="padding: 15px;">3</td>
+          <td style="padding: 15px;"><span contenteditable="false">Social Support Check</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">4 Weeks</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2023-01-01 10:00:00</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><span contenteditable="false">2024-01-01 11:00:00</span> <span class="edit-icon" onclick="makeEditable(this)">✎</span></td>
+          <td style="padding: 15px;"><button class="edit-button" onclick="openEditForm(3)" style="border: none; background-color: #f9f9f9; cursor: pointer;"><img src="../static/icons/pencil-square.png" alt="" style="width: 19px; height: 19px;"></button></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div id="edit-form" class="dashboard" style="display: none;">
+      <h2>Add a Scheduler for Patient</h2>
+      <form>
+        <label for="item-name">Item Name</label>
+        <br>
+        <input type="text" id="item-name" placeholder="Enter the item name">
+        <br>
+        <label for="question-list">Question List for this Item</label>
+        <br>
+        <textarea id="question-list" placeholder="Enter questions or details"></textarea>
+        <br>
+        <label for="frequency">Frequency</label>
+        <br>
+        <select id="frequency">
+          <option value="1-week">1 Week</option>
+          <option value="2-weeks">2 Weeks</option>
+          <option value="4-weeks">4 Weeks</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <br>
+        <label for="start-date">Start Date</label>
+        <br>
+        <input type="text" id="start-date" placeholder="YYYY-MM-DD HH:MM:SS">
+        <br>
+        <label for="end-date">End Date</label>
+        <br>
+        <input type="text" id="end-date" placeholder="YYYY-MM-DD HH:MM:SS">
+        <br>
+        <div class="buttons">
+          <button type="button" class="cancel-button">Cancel</button>
+          <button type="submit" class="save-button">Save</button>
+        </div>
+      </form>
+    </div>
+    <elevenlabs-convai agent-id="3JYq3pt7rPssSdo5JLCf"></elevenlabs-convai><script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+
+  <script>
+    function switchTab(tabId) {
+      // Hide all dashboards
+      document.querySelectorAll('.dashboard').forEach(dashboard => {
+        dashboard.style.display = 'none';
+      });
+      
+      // Show selected dashboard
+      document.getElementById(tabId).style.display = 'block';
+      
+      // Update sidebar active state
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`a[href="#${tabId}"]`).classList.add('active');
+    }
+
+    function swithTab2(tabId) {
+      if (tabId === 'check-in') {
+        document.getElementById('check-in').style.display = 'block';
+        document.getElementById('medical-record').style.display = 'none';
+      } else {
+        document.getElementById('check-in').style.display = 'none';
+        document.getElementById('medical-record').style.display = 'block';
+      }
+    }
+
+    function makeEditable(editIcon) {
+      const contentSpan = editIcon.previousElementSibling;
+      contentSpan.contentEditable = true;
+      contentSpan.classList.add('editable-content');
+      contentSpan.focus();
+
+      contentSpan.addEventListener('blur', function() {
+        contentSpan.contentEditable = false;
+        contentSpan.classList.remove('editable-content');
+      });
+
+      contentSpan.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          contentSpan.blur();
+        }
+      });
+    }
+
+    function openEditForm(scheduleId) {
+      document.getElementById('edit-form').style.display = 'block';
+      document.getElementById('edit-schedule-id').textContent = scheduleId;
+      
+      // Find the row with the matching schedule ID
+      const row = document.querySelector(`tr:has(td:first-child:contains('${scheduleId}'))`);
+      if (row) {
+        // Populate form fields with current values
+        document.getElementById('edit-schedule-items').value = row.querySelector('td:nth-child(2) span').textContent;
+        document.getElementById('edit-frequency').value = row.querySelector('td:nth-child(3) span').textContent;
+        
+        // Convert datetime strings to datetime-local format
+        const startDate = row.querySelector('td:nth-child(4) span').textContent;
+        const endDate = row.querySelector('td:nth-child(5) span').textContent;
+        document.getElementById('edit-start-date').value = startDate.replace(' ', 'T');
+        document.getElementById('edit-end-date').value = endDate.replace(' ', 'T');
+      }
+    }
+
+    function toggleCall(button) {
+      if (button.textContent === "Make Voice Agent Call") {
+        fetch('/start-convo')
+        .then(() => {
+          button.textContent = "End Call";
+          button.style.backgroundColor = "#ff5e5e";
+        });
+      } else {
+        fetch('/end-convo')
+        .then(() => {
+          button.textContent = "Make Voice Agent Call"; 
+          button.style.backgroundColor = "#66c07d";
+        });
+      }
+    }
+
+    function syncCalls() {
+      fetch('/get-convo-data')
+        .then(() => {
+          location.reload();
+        });
+    }
+  </script>
+</body>
+</html>
